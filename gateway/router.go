@@ -2,6 +2,7 @@ package gateway
 
 import (
 	"context"
+	"github.com/google/uuid"
 	"golang.org/x/net/http2"
 	"net/http"
 	"strconv"
@@ -49,6 +50,7 @@ func (r *Router) Run(ctx context.Context) error {
 }
 
 func (r *Router) Middleware() error {
+	r.engine.Use(setRequestID)
 	r.engine.Use(middleware.Logger())
 	r.engine.Use(middleware.Recover())
 	if r.config.Metric.Enable {
@@ -59,6 +61,15 @@ func (r *Router) Middleware() error {
 		go r.runMetricServer(metricPort)
 	}
 	return nil
+}
+
+func setRequestID(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		requestID := uuid.New().String()
+		c.Request().Header.Set(echo.HeaderXRequestID, requestID)
+		c.Response().Header().Set(s3.XAMZRequestID, requestID)
+		return next(c)
+	}
 }
 
 func (r *Router) Handler() error {

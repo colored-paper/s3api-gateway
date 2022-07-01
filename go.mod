@@ -3,6 +3,7 @@ module github.com/coloered-paper/s3api-gateway
 go 1.18
 
 require (
+	github.com/google/uuid v1.3.0
 	github.com/labstack/echo-contrib v0.12.0
 	github.com/labstack/echo/v4 v4.7.2
 	golang.org/x/net v0.0.0-20220624214902-1bab6f366d9e
