@@ -5,10 +5,11 @@ import (
 )
 
 type Config struct {
-	Name string
+	ActorType string
 }
 
 type Actor interface {
+	Health(c echo.Context) error
 	AbortMultipartUpload(c echo.Context) error
 	CompleteMultipartUpload(c echo.Context) error
 	CopyObject(c echo.Context) error

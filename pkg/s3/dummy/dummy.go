@@ -2,16 +2,20 @@ package dummy
 
 import (
 	"context"
-	"github.com/coloered-paper/s3api-gateway/s3"
 	"net/http"
 
+	"github.com/coloered-paper/s3api-gateway/pkg/s3"
 	"github.com/labstack/echo/v4"
 )
 
 type Actor struct{}
 
-func New(ctx context.Context, cfg s3.Config) (*Actor, error) {
-	return &Actor{}, nil
+func New(ctx context.Context, cfg s3.Config) *Actor {
+	return &Actor{}
+}
+
+func (a Actor) Health(c echo.Context) error {
+	return c.NoContent(http.StatusOK)
 }
 
 func (a Actor) AbortMultipartUpload(c echo.Context) error {
